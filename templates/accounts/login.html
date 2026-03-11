@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In – TeamHub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            background: #f1f5f9;
+            margin: 0;
+        }
+        .auth-left {
+            flex: 1;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #3730a3 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 48px;
+            color: white;
+        }
+        .auth-left .brand {
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 48px;
+        }
+        .auth-left .brand-icon {
+            width: 48px; height: 48px;
+            background: rgba(255,255,255,.2);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
+        }
+        .auth-left .brand-name { font-size: 24px; font-weight: 700; }
+        .auth-left h1 { font-size: 32px; font-weight: 700; margin-bottom: 12px; }
+        .auth-left p { font-size: 16px; opacity: .8; max-width: 320px; text-align: center; }
+        .feature-list { list-style: none; padding: 0; margin-top: 32px; }
+        .feature-list li {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 14px; opacity: .85; margin-bottom: 12px;
+        }
+        .feature-list li i { font-size: 18px; }
+        .auth-right {
+            width: 440px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            background: white;
+        }
+        .auth-form { width: 100%; max-width: 360px; }
+        .auth-form h2 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+        .auth-form .subtitle { font-size: 14px; color: #64748b; margin-bottom: 32px; }
+        .form-label { font-size: 13px; font-weight: 600; color: #1e293b; }
+        .form-control {
+            border-radius: 8px;
+            border-color: #e2e8f0;
+            font-size: 14px;
+            padding: 10px 14px;
+        }
+        .form-control:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99,102,241,.15);
+        }
+        .btn-primary {
+            background: #6366f1; border-color: #6366f1;
+            border-radius: 8px; font-size: 14px; font-weight: 600;
+            padding: 11px; width: 100%; margin-top: 8px;
+        }
+        .btn-primary:hover { background: #4f46e5; border-color: #4f46e5; }
+        .divider { text-align: center; color: #94a3b8; font-size: 13px; margin: 20px 0; }
+        .link { color: #6366f1; text-decoration: none; font-weight: 500; }
+        .link:hover { color: #4f46e5; }
+        @media (max-width: 768px) {
+            .auth-left { display: none; }
+            .auth-right { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+<div class="auth-left">
+    <div class="brand">
+        <div class="brand-icon"><i class="bi bi-people-fill"></i></div>
+        <span class="brand-name">TeamHub</span>
+    </div>
+    <h1>Welcome back</h1>
+    <p>Your team collaboration platform — organised, secure, and fast.</p>
+    <ul class="feature-list">
+        <li><i class="bi bi-check-circle-fill"></i> Collaboration spaces with role-based access</li>
+        <li><i class="bi bi-check-circle-fill"></i> Shared notes and documents</li>
+        <li><i class="bi bi-check-circle-fill"></i> Deployed on AWS Elastic Beanstalk</li>
+    </ul>
+</div>
+
+<div class="auth-right">
+    <div class="auth-form">
+        <h2>Sign in</h2>
+        <p class="subtitle">Enter your credentials to access your workspace</p>
+
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-danger mb-3" style="border-radius:8px;font-size:13px;border:none;background:#fef2f2;color:#991b1b;">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" placeholder="Your username" autofocus
+                       value="{{ form.username.value|default:'' }}">
+                {% if form.username.errors %}
+                <div style="color:#ef4444;font-size:12px;margin-top:4px;">{{ form.username.errors.0 }}</div>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" placeholder="Your password">
+                {% if form.password.errors %}
+                <div style="color:#ef4444;font-size:12px;margin-top:4px;">{{ form.password.errors.0 }}</div>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+            </button>
+        </form>
+
+        <div class="divider">— or —</div>
+        <p style="text-align:center;font-size:14px;color:#64748b;">
+            Don't have an account? <a href="{% url 'register' %}" class="link">Create one</a>
+        </p>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

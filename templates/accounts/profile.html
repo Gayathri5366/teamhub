@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Profile – TeamHub{% endblock %}
+{% block page_title %}My Profile{% endblock %}
+{% block nav_profile %}active{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6">
+        <div class="card mb-4">
+            <div class="card-body" style="padding:28px;text-align:center;">
+                <div class="avatar mx-auto mb-3" style="width:64px;height:64px;font-size:26px;background:linear-gradient(135deg,#6366f1,#818cf8);">
+                    {{ user.username|slice:":1"|upper }}
+                </div>
+                <h4 style="font-weight:700;margin-bottom:4px;">{{ user.username }}</h4>
+                <p style="color:#64748b;font-size:14px;margin-bottom:4px;">{{ user.email }}</p>
+                <p style="color:#94a3b8;font-size:12px;">Member since {{ user.date_joined|date:"M d, Y" }}</p>
+            </div>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-4">
+                <div class="card p-3 text-center">
+                    <div style="font-size:28px;font-weight:700;color:#6366f1;">{{ owned_spaces }}</div>
+                    <div style="font-size:12px;color:#64748b;">Spaces Owned</div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card p-3 text-center">
+                    <div style="font-size:28px;font-weight:700;color:#10b981;">{{ member_spaces }}</div>
+                    <div style="font-size:12px;color:#64748b;">Memberships</div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card p-3 text-center">
+                    <div style="font-size:28px;font-weight:700;color:#f59e0b;">{{ authored_notes }}</div>
+                    <div style="font-size:12px;color:#64748b;">Notes Created</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

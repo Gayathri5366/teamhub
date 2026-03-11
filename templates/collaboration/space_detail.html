@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block title %}{{ space.name }} – TeamHub{% endblock %}
+{% block page_title %}{{ space.name }}{% endblock %}
+
+{% block topbar_actions %}
+{% if is_owner %}
+<a href="{% url 'space_edit' space.pk %}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-pencil me-1"></i>Edit
+</a>
+{% if space.status == 'active' %}
+<form method="post" action="{% url 'space_archive' space.pk %}" class="d-inline">
+    {% csrf_token %}
+    <button class="btn btn-outline-warning btn-sm" onclick="return confirm('Archive this space?')">
+        <i class="bi bi-archive me-1"></i>Archive
+    </button>
+</form>
+{% endif %}
+<a href="{% url 'space_delete' space.pk %}" class="btn btn-outline-danger btn-sm">
+    <i class="bi bi-trash me-1"></i>Delete
+</a>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'space_list' %}">Spaces</a></li>
+        <li class="breadcrumb-item active">{{ space.name }}</li>
+    </ol>
+</nav>
+
+{% if space.description %}
+<p style="color:#64748b;font-size:14px;margin-bottom:24px;">{{ space.description }}</p>
+{% endif %}
+
+<div class="row g-4">
+    <!-- Members panel -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span style="font-weight:600;font-size:14px;"><i class="bi bi-people me-2 text-primary"></i>Members</span>
+                {% if is_owner %}
+                <a href="{% url 'member_add' space.pk %}" class="btn btn-primary btn-sm">
+                    <i class="bi bi-plus-lg"></i>
+                </a>
+                {% endif %}
+            </div>
+            <div style="padding:8px;">
+                <!-- Owner row -->
+                <div class="d-flex align-items-center gap-3 p-2 rounded mb-1" style="background:#fafafa;">
+                    <div class="avatar" style="width:34px;height:34px;font-size:13px;">
+                        {{ space.owner.username|slice:":1"|upper }}
+                    </div>
+                    <div class="flex-1">
+                        <div style="font-size:13px;font-weight:600;">{{ space.owner.username }}
+                            {% if space.owner == user %}<span style="color:#94a3b8;font-weight:400;"> (you)</span>{% endif %}
+                        </div>
+                    </div>
+                    <span class="badge badge-admin">Admin</span>
+                </div>
+
+                {% for member in members %}
+                <div class="d-flex align-items-center gap-3 p-2 rounded mb-1" style="background:#fafafa;">
+                    <div class="avatar" style="width:34px;height:34px;font-size:13px;background:#818cf8;">
+                        {{ member.user.username|slice:":1"|upper }}
+                    </div>
+                    <div class="flex-1">
+                        <div style="font-size:13px;font-weight:600;">{{ member.user.username }}
+                            {% if member.user == user %}<span style="color:#94a3b8;font-weight:400;"> (you)</span>{% endif %}
+                        </div>
+                    </div>
+                    <span class="badge badge-{{ member.role }}">{{ member.get_role_display }}</span>
+                    {% if is_owner %}
+                    <div class="d-flex gap-1">
+                        <a href="{% url 'member_update_role' space.pk member.pk %}"
+                           class="btn btn-sm p-1" style="line-height:1;color:#64748b;" title="Change role">
+                            <i class="bi bi-pencil" style="font-size:12px;"></i>
+                        </a>
+                        <form method="post" action="{% url 'member_remove' space.pk member.pk %}" class="d-inline">
+                            {% csrf_token %}
+                            <button class="btn btn-sm p-1" style="line-height:1;color:#ef4444;" title="Remove"
+                                    onclick="return confirm('Remove {{ member.user.username }}?')">
+                                <i class="bi bi-x-lg" style="font-size:12px;"></i>
+                            </button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+                {% empty %}
+                <p style="font-size:13px;color:#94a3b8;text-align:center;padding:16px 0;margin:0;">No other members yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Notes panel -->
+    <div class="col-lg-8">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 style="font-weight:600;color:#64748b;font-size:12px;letter-spacing:.8px;text-transform:uppercase;margin:0;">
+                Shared Notes
+            </h6>
+            {% if user_role in "admin,editor" or is_owner %}
+            <a href="{% url 'note_create' space.pk %}" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-lg me-1"></i>New Note
+            </a>
+            {% endif %}
+        </div>
+
+        {% for note in notes %}
+        <div class="card note-card mb-3">
+            <div class="card-body" style="padding:16px 20px;">
+                <div class="d-flex justify-content-between align-items-start gap-3">
+                    <div class="flex-1">
+                        <div style="font-size:14px;font-weight:600;margin-bottom:4px;">{{ note.title }}</div>
+                        <div style="font-size:13px;color:#64748b;line-height:1.5;">{{ note.content|truncatechars:180 }}</div>
+                        <div style="font-size:11px;color:#94a3b8;margin-top:10px;display:flex;gap:12px;">
+                            <span><i class="bi bi-person me-1"></i>{{ note.author.username }}</span>
+                            <span><i class="bi bi-clock me-1"></i>{{ note.updated_at|timesince }} ago</span>
+                        </div>
+                    </div>
+                    {% if note.author == user or is_owner %}
+                    <div class="d-flex gap-1">
+                        <a href="{% url 'note_edit' space.pk note.pk %}"
+                           class="btn btn-sm btn-outline-secondary" style="padding:5px 10px;">
+                            <i class="bi bi-pencil" style="font-size:12px;"></i>
+                        </a>
+                        <a href="{% url 'note_delete' space.pk note.pk %}"
+                           class="btn btn-sm btn-outline-danger" style="padding:5px 10px;">
+                            <i class="bi bi-trash" style="font-size:12px;"></i>
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state" style="padding:40px 20px;">
+            <div class="empty-state-icon" style="width:56px;height:56px;font-size:24px;">
+                <i class="bi bi-file-earmark-text"></i>
+            </div>
+            <p style="color:#64748b;font-size:14px;margin:0;">No notes yet. Create the first one!</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

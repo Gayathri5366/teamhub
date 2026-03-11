@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} – TeamHub{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-5">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'space_list' %}">Spaces</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'space_detail' space.pk %}">{{ space.name }}</a></li>
+                <li class="breadcrumb-item active">{{ title }}</li>
+            </ol>
+        </nav>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-person-plus me-2"></i>{{ title }}</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    <!-- Username field with live search -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Username</label>
+
+                        {% if available_users %}
+                        <!-- Dropdown picker for registered users -->
+                        <div class="mb-2">
+                            <select id="user-picker" class="form-select">
+                                <option value="">— Pick a registered user —</option>
+                                {% for u in available_users %}
+                                <option value="{{ u.username }}">
+                                    {{ u.username }}{% if u.get_full_name %} ({{ u.get_full_name }}){% endif %}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text text-muted">
+                                Select from {{ available_users|length }} registered user(s), or type manually below.
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Manual text input (also filled by picker) -->
+                        <input type="text"
+                               name="username"
+                               id="id_username"
+                               class="form-control {% if form.username.errors %}is-invalid{% endif %}"
+                               placeholder="Or type a username manually"
+                               value="{{ form.username.value|default:'' }}"
+                               autocomplete="off">
+
+                        {% if form.username.errors %}
+                        <div class="invalid-feedback d-block">
+                            {% for e in form.username.errors %}{{ e }}{% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Role field -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Role</label>
+                        <select name="role" class="form-select">
+                            {% for value, label in form.fields.role.choices %}
+                            <option value="{{ value }}"
+                                {% if form.role.value == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-text text-muted">
+                            <strong>Admin</strong> – full control &nbsp;|&nbsp;
+                            <strong>Editor</strong> – create &amp; edit notes &nbsp;|&nbsp;
+                            <strong>Viewer</strong> – read only
+                        </div>
+                        {% if form.role.errors %}
+                        <div class="invalid-feedback d-block">
+                            {% for e in form.role.errors %}{{ e }}{% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-person-check me-1"></i>Add Member
+                        </button>
+                        <a href="{% url 'space_detail' space.pk %}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% if not available_users %}
+        <div class="alert alert-info mt-3">
+            <i class="bi bi-info-circle me-2"></i>
+            All registered users are already members of this space, or no other users have registered yet.
+            New users must <a href="{% url 'register' %}">register an account</a> before they can be added.
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // When a user is selected from the dropdown, populate the text input
+    const picker = document.getElementById('user-picker');
+    const input  = document.getElementById('id_username');
+    if (picker) {
+        picker.addEventListener('change', function () {
+            if (this.value) {
+                input.value = this.value;
+                input.classList.remove('is-invalid');
+            }
+        });
+    }
+
+    // Keep picker in sync if user types manually
+    if (input && picker) {
+        input.addEventListener('input', function () {
+            const match = [...picker.options].find(o => o.value === this.value);
+            picker.value = match ? match.value : '';
+        });
+    }
+</script>
+{% endblock %}

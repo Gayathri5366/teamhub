@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TeamHub{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #e0e7ff;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --surface: #ffffff;
+            --bg: #f1f5f9;
+            --sidebar-bg: #0f172a;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.04);
+            --shadow-md: 0 4px 24px rgba(99,102,241,.12);
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        /* ── Sidebar ─────────────────────────── */
+        .sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            width: 240px;
+            height: 100vh;
+            background: var(--sidebar-bg);
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            z-index: 100;
+            overflow-y: auto;
+        }
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 22px 20px;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255,255,255,.08);
+        }
+        .sidebar-brand .brand-icon {
+            width: 36px; height: 36px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; color: white;
+            flex-shrink: 0;
+        }
+        .sidebar-brand .brand-text {
+            font-size: 17px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.3px;
+        }
+        .sidebar-section {
+            padding: 20px 12px 8px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,.3);
+            text-transform: uppercase;
+        }
+        .sidebar-nav { padding: 0 8px; flex: 1; }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: rgba(255,255,255,.65);
+            font-size: 14px;
+            font-weight: 500;
+            transition: all .15s;
+            margin-bottom: 2px;
+        }
+        .sidebar-link:hover {
+            background: rgba(255,255,255,.08);
+            color: white;
+        }
+        .sidebar-link.active {
+            background: var(--primary);
+            color: white;
+        }
+        .sidebar-link i { font-size: 16px; width: 20px; flex-shrink: 0; }
+        .sidebar-footer {
+            padding: 12px;
+            border-top: 1px solid rgba(255,255,255,.08);
+        }
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: rgba(255,255,255,.06);
+        }
+        .avatar {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+            flex-shrink: 0;
+        }
+        .user-info { flex: 1; min-width: 0; }
+        .user-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .user-role { font-size: 11px; color: rgba(255,255,255,.4); }
+
+        /* ── Main content ─────────────────────── */
+        .main-wrap {
+            margin-left: 240px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 28px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .topbar-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .topbar-actions { display: flex; align-items: center; gap: 10px; }
+        .page-content { padding: 28px; flex: 1; }
+
+        /* ── Buttons ──────────────────────────── */
+        .btn-primary {
+            background: var(--primary);
+            border-color: var(--primary);
+            font-weight: 500;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+        .btn-outline-primary { color: var(--primary); border-color: var(--primary); border-radius: 8px; font-size: 14px; }
+        .btn-outline-primary:hover { background: var(--primary); }
+        .btn-outline-secondary { border-radius: 8px; font-size: 14px; }
+        .btn-sm { font-size: 12px !important; padding: 5px 12px !important; }
+
+        /* ── Cards ────────────────────────────── */
+        .card {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        .card-header {
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+            border-radius: var(--radius) var(--radius) 0 0 !important;
+            padding: 16px 20px;
+        }
+
+        /* ── Space cards ──────────────────────── */
+        .space-card {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+            box-shadow: var(--shadow);
+            transition: all .2s ease;
+            overflow: hidden;
+        }
+        .space-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary);
+        }
+        .space-card-accent {
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), #818cf8);
+        }
+        .space-card-body { padding: 20px; }
+        .space-card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .space-card-title:hover { color: var(--primary); }
+        .space-meta {
+            display: flex;
+            gap: 14px;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 14px;
+        }
+        .space-meta span { display: flex; align-items: center; gap: 4px; }
+        .space-card-footer {
+            padding: 12px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 8px;
+            background: #fafafa;
+        }
+
+        /* ── Badges ───────────────────────────── */
+        .badge { font-weight: 500; font-size: 11px; border-radius: 6px; padding: 4px 8px; }
+        .badge-owner { background: var(--primary-light); color: var(--primary-dark); }
+        .badge-admin { background: #fee2e2; color: #dc2626; }
+        .badge-editor { background: #fef3c7; color: #d97706; }
+        .badge-viewer { background: #f1f5f9; color: #475569; }
+
+        /* ── Alerts / messages ────────────────── */
+        .alert { border-radius: 10px; font-size: 14px; border: none; }
+        .alert-success { background: #ecfdf5; color: #065f46; }
+        .alert-error, .alert-danger { background: #fef2f2; color: #991b1b; }
+        .alert-info { background: #eff6ff; color: #1e40af; }
+        .alert-warning { background: #fffbeb; color: #92400e; }
+
+        /* ── Note card ────────────────────────── */
+        .note-card {
+            border-left: 3px solid var(--primary) !important;
+            border-radius: var(--radius) !important;
+            background: var(--surface);
+        }
+
+        /* ── Forms ────────────────────────────── */
+        .form-control, .form-select {
+            border-radius: 8px;
+            border-color: var(--border);
+            font-size: 14px;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,.15);
+        }
+        .form-label { font-size: 13px; font-weight: 600; color: var(--text); }
+
+        /* ── Breadcrumb ───────────────────────── */
+        .breadcrumb { font-size: 13px; }
+        .breadcrumb-item a { color: var(--primary); text-decoration: none; }
+
+        /* ── Empty state ──────────────────────── */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .empty-state-icon {
+            width: 72px; height: 72px;
+            background: var(--primary-light);
+            border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px;
+            color: var(--primary);
+            margin: 0 auto 20px;
+        }
+
+        /* ── Mobile ───────────────────────────── */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 14px; left: 14px;
+            z-index: 200;
+            background: var(--sidebar-bg);
+            border: none;
+            color: white;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 18px;
+        }
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); transition: transform .25s; }
+            .sidebar.open { transform: translateX(0); }
+            .main-wrap { margin-left: 0; }
+            .mobile-toggle { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+<button class="mobile-toggle" id="sidebarToggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">
+    <i class="bi bi-list"></i>
+</button>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+    <a class="sidebar-brand" href="{% url 'space_list' %}">
+        <div class="brand-icon"><i class="bi bi-people-fill"></i></div>
+        <span class="brand-text">TeamHub</span>
+    </a>
+
+    {% if user.is_authenticated %}
+    <div class="sidebar-nav">
+        <div class="sidebar-section">Workspace</div>
+        <a href="{% url 'space_list' %}" class="sidebar-link {% block nav_spaces %}{% endblock %}">
+            <i class="bi bi-grid-1x2"></i> My Spaces
+        </a>
+        <a href="{% url 'space_create' %}" class="sidebar-link {% block nav_create %}{% endblock %}">
+            <i class="bi bi-plus-square"></i> New Space
+        </a>
+
+        <div class="sidebar-section">Account</div>
+        <a href="{% url 'profile' %}" class="sidebar-link {% block nav_profile %}{% endblock %}">
+            <i class="bi bi-person-circle"></i> Profile
+        </a>
+    </div>
+
+    <div class="sidebar-footer">
+        <div class="user-pill">
+            <div class="avatar">{{ user.username|slice:":1"|upper }}</div>
+            <div class="user-info">
+                <div class="user-name">{{ user.username }}</div>
+                <div class="user-role">Member</div>
+            </div>
+            <form method="post" action="{% url 'logout' %}" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn p-0 border-0" title="Logout"
+                    style="background:none; color:rgba(255,255,255,.4); font-size:16px;">
+                    <i class="bi bi-box-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    {% else %}
+    <div class="sidebar-nav">
+        <a href="{% url 'login' %}" class="sidebar-link"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+        <a href="{% url 'register' %}" class="sidebar-link"><i class="bi bi-person-plus"></i> Register</a>
+    </div>
+    {% endif %}
+</aside>
+
+<!-- Main -->
+<div class="main-wrap">
+    <header class="topbar">
+        <div class="topbar-title">{% block page_title %}TeamHub{% endblock %}</div>
+        <div class="topbar-actions">{% block topbar_actions %}{% endblock %}</div>
+    </header>
+
+    <main class="page-content">
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show mb-4" role="alert">
+                <i class="bi bi-check-circle me-2"></i>{{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

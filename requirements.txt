@@ -1,0 +1,15 @@
+# TeamHub – Python Dependencies
+# Cloud DevOpsSec Project – AWS EC2 + Gunicorn Deployment
+
+# Core Framework
+Django==4.2.16
+whitenoise==6.7.0       # Efficient static file serving via Gunicorn
+gunicorn==22.0.0        # Production WSGI server (runs on EC2 port 8000)
+
+# Testing & Coverage
+coverage==7.6.1
+
+# Static Analysis (CI pipeline – Flake8, Bandit, Safety)
+flake8==7.1.1
+bandit==1.7.10
+safety==3.2.8
