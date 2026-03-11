@@ -1,0 +1,36 @@
+# Python
+*.pyc
+*.pyo
+__pycache__/
+*.pyd
+*.pdb
+
+# Virtual environment (never commit this)
+venv/
+env/
+.venv/
+
+# Django
+db.sqlite3
+staticfiles/
+*.log
+
+# Keys (NEVER commit SSH keys)
+deploy_key
+deploy_key.pub
+*.pem
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Coverage
+.coverage
+htmlcov/
+coverage.xml
+bandit-report.json
+
+# OS
+.DS_Store
+Thumbs.db
