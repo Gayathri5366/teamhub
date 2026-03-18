@@ -135,8 +135,7 @@ jobs:
           name: coverage-report
           path: coverage.xml
 
-  # ── Stage 4: Deploy to AWS EC2 via SSH ────────────────────────────────────
-  # Only runs on push to main (not on pull requests)
+ # ── Stage 4: Deploy to AWS EC2 via SSH ────────────────────────────────────
   deploy:
     name: "Stage 4 – Deploy to AWS EC2"
     runs-on: ubuntu-latest
@@ -145,15 +144,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: SSH into EC2 and deploy
-        uses: appleboy/ssh-action@v0.1.6
+      - name: Deploy to EC2                        # ← YOUR NEW STEP GOES HERE
+        uses: appleboy/ssh-action@v1               # ← updated from v0.1.6
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ec2-user
+          username: ${{ secrets.EC2_USERNAME }}    # ← now uses a secret instead of hardcoded "ec2-user"
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd ~/teamhub
+            cd ~/teamhub                           # ← update this path to match your app
             git pull origin main
             source venv/bin/activate
             pip install -r requirements.txt
