@@ -13,47 +13,83 @@
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
             display: flex;
-            background: #f1f5f9;
+            justify-content: center;
+            align-items: stretch; /* panels fill height */
+            background: linear-gradient(135deg, #e0f2fe 0%, #e0e7ff 100%);
             margin: 0;
         }
+        /* add a colorful side panel */
         .auth-left {
             flex: 1;
             background: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #3730a3 100%);
+            color: white;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 48px;
-            color: white;
+            height: 100vh; /* ensure full height match */
         }
         .auth-left .brand {
             display: flex; align-items: center; gap: 12px;
-            margin-bottom: 48px;
+            margin-bottom: 24px;
         }
-        .auth-left .brand-icon {
-            width: 48px; height: 48px;
-            background: rgba(255,255,255,.2);
-            border-radius: 14px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 22px;
-        }
-        .auth-left .brand-name { font-size: 24px; font-weight: 700; }
+        .auth-left .brand-icon { background: rgba(255,255,255,.2); }
         .auth-left h1 { font-size: 32px; font-weight: 700; margin-bottom: 12px; }
-        .auth-left p { font-size: 16px; opacity: .8; max-width: 320px; text-align: center; }
-        .feature-list { list-style: none; padding: 0; margin-top: 32px; }
-        .feature-list li {
-            display: flex; align-items: center; gap: 10px;
-            font-size: 14px; opacity: .85; margin-bottom: 12px;
-        }
-        .feature-list li i { font-size: 18px; }
+        .auth-left p { font-size: 16px; opacity: .85; max-width: 320px; text-align: center; }
         .auth-right {
-            width: 440px;
+            width: 420px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 40px;
+            padding: 40px 20px;
             background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #6366f1;
+            height: 100vh; /* match left panel height */
         }
+        .brand {
+            display: flex; align-items: center; gap: 8px;
+            margin-bottom: 24px;
+            justify-content: center;
+        }
+        .brand-icon {
+            width: 32px; height: 32px;
+            background: #6366f1;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            color: white;
+        }
+        .brand-name { font-size: 20px; font-weight: 700; color: #334155; }
+        .auth-form h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: #1e293b; }
+        .auth-form .subtitle { font-size: 14px; color: #64748b; margin-bottom: 24px; }
+        .form-label { font-size: 13px; font-weight: 600; color: #1e293b; }
+        .form-control {
+            border-radius: 8px;
+            border-color: #cbd5e1;
+            font-size: 14px;
+            padding: 10px 14px;
+        }
+        .form-control:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99,102,241,.15);
+        }
+        .btn-primary {
+            background: #6366f1; border-color: #6366f1;
+            border-radius: 8px; font-size: 14px; font-weight: 600;
+            padding: 11px; width: 100%; margin-top: 8px;
+        }
+        .btn-primary:hover { background: #4f46e5; border-color: #4f46e5; }
+        .divider { text-align: center; color: #94a3b8; font-size: 13px; margin: 20px 0; }
+        .link { color: #6366f1; text-decoration: none; font-weight: 500; }
+        .link:hover { color: #4f46e5; }
+        @media (max-width: 768px) {
+            .auth-left { display: none; }
+            .auth-right { width: 100%; padding: 30px 12px; }
+        }
+        /* form styles */
         .auth-form { width: 100%; max-width: 360px; }
         .auth-form h2 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
         .auth-form .subtitle { font-size: 14px; color: #64748b; margin-bottom: 32px; }
@@ -79,7 +115,7 @@
         .link:hover { color: #4f46e5; }
         @media (max-width: 768px) {
             .auth-left { display: none; }
-            .auth-right { width: 100%; }
+            .auth-right { width: 100%; padding: 30px 12px; }
         }
     </style>
 </head>
@@ -91,17 +127,16 @@
     </div>
     <h1>Welcome back</h1>
     <p>Your team collaboration platform — organised, secure, and fast.</p>
-    <ul class="feature-list">
-        <li><i class="bi bi-check-circle-fill"></i> Collaboration spaces with role-based access</li>
-        <li><i class="bi bi-check-circle-fill"></i> Shared notes and documents</li>
-        <li><i class="bi bi-check-circle-fill"></i> Deployed on AWS Elastic Beanstalk</li>
-    </ul>
 </div>
 
 <div class="auth-right">
     <div class="auth-form">
+        <div class="brand">
+            <div class="brand-icon"><i class="bi bi-people-fill"></i></div>
+            <span class="brand-name">TeamHub</span>
+        </div>
         <h2>Sign in</h2>
-        <p class="subtitle">Enter your credentials to access your workspace</p>
+        <p class="subtitle">Please sign in to continue.</p>
 
         {% if messages %}
             {% for message in messages %}

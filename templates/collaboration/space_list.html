@@ -11,38 +11,78 @@
 
 {% block content %}
 
+<style>
+    .welcome-banner {
+        background: linear-gradient(90deg, var(--primary), #818cf8);
+        border-radius: var(--radius);
+        padding: 20px 24px;
+        display: flex;
+        align-items: center;
+        color: white;
+        box-shadow: var(--shadow-md);
+    }
+    .welcome-banner .avatar {
+        width:48px;height:48px;
+        background:white;
+        color:var(--primary);
+        font-size:20px;font-weight:600;
+        display:flex;align-items:center;justify-content:center;
+        border-radius:50%;
+        margin-right:16px;
+    }
+    .stats-card { border: none; }
+    .stats-icon {
+        width:44px;height:44px;border-radius:12px;
+        display:flex;align-items:center;justify-content:center;font-size:20px;
+    }
+    .stats-icon.primary { background: var(--primary-light); color: var(--primary); }
+    .stats-number { font-size:22px;font-weight:700;color:var(--text); }
+    .stats-label { font-size:12px;color:var(--text-muted); }
+</style>
+
+<!-- greeting banner -->
+<div class="mb-4">
+    <div class="welcome-banner">
+        <div class="avatar">{{ user.username|slice:":1"|upper }}</div>
+        <div>
+            <h2 style="margin:0;font-size:22px;font-weight:600;">Welcome back, {{ user.username }}!</h2>
+            <p style="margin:0;font-size:14px;opacity:.85;">Let’s get you back to work.</p>
+        </div>
+    </div>
+</div>
+
 <!-- Stats row -->
 <div class="row g-3 mb-4">
     <div class="col-sm-4">
-        <div class="card p-4 d-flex flex-row align-items-center gap-3">
-            <div style="width:44px;height:44px;border-radius:12px;background:#e0e7ff;display:flex;align-items:center;justify-content:center;font-size:20px;color:#6366f1;">
+        <div class="card p-4 d-flex flex-row align-items-center gap-3 stats-card">
+            <div class="stats-icon primary">
                 <i class="bi bi-grid-1x2"></i>
             </div>
             <div>
-                <div style="font-size:22px;font-weight:700;color:#1e293b;">{{ active_spaces|length }}</div>
-                <div style="font-size:12px;color:#64748b;">Active Spaces</div>
+                <div class="stats-number">{{ active_spaces|length }}</div>
+                <div class="stats-label">Active Spaces</div>
             </div>
         </div>
     </div>
     <div class="col-sm-4">
-        <div class="card p-4 d-flex flex-row align-items-center gap-3">
-            <div style="width:44px;height:44px;border-radius:12px;background:#ecfdf5;display:flex;align-items:center;justify-content:center;font-size:20px;color:#10b981;">
+        <div class="card p-4 d-flex flex-row align-items-center gap-3 stats-card">
+            <div class="stats-icon" style="background:#ecfdf5;color:#10b981;">
                 <i class="bi bi-people"></i>
             </div>
             <div>
-                <div style="font-size:22px;font-weight:700;color:#1e293b;">{{ user.space_memberships.count }}</div>
-                <div style="font-size:12px;color:#64748b;">Memberships</div>
+                <div class="stats-number">{{ user.space_memberships.count }}</div>
+                <div class="stats-label">Memberships</div>
             </div>
         </div>
     </div>
     <div class="col-sm-4">
-        <div class="card p-4 d-flex flex-row align-items-center gap-3">
-            <div style="width:44px;height:44px;border-radius:12px;background:#fef3c7;display:flex;align-items:center;justify-content:center;font-size:20px;color:#f59e0b;">
+        <div class="card p-4 d-flex flex-row align-items-center gap-3 stats-card">
+            <div class="stats-icon" style="background:#fef3c7;color:#f59e0b;">
                 <i class="bi bi-file-text"></i>
             </div>
             <div>
-                <div style="font-size:22px;font-weight:700;color:#1e293b;">{{ user.authored_notes.count }}</div>
-                <div style="font-size:12px;color:#64748b;">Notes Created</div>
+                <div class="stats-number">{{ user.authored_notes.count }}</div>
+                <div class="stats-label">Notes Created</div>
             </div>
         </div>
     </div>
