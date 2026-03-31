@@ -3,22 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In – TeamHub & colloboration hub</title>
+    <title>Sign In – TeamHub & collaboration hub</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
         * { box-sizing: border-box; }
+
         body {
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: stretch; /* panels fill height */
+            align-items: stretch;
             background: linear-gradient(135deg, #e0f2fe 0%, #e0e7ff 100%);
             margin: 0;
         }
-        /* add a colorful side panel */
+
         .auth-left {
             flex: 1;
             background: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #3730a3 100%);
@@ -28,15 +31,12 @@
             justify-content: center;
             align-items: center;
             padding: 48px;
-            height: 100vh; /* ensure full height match */
+            height: 100vh;
         }
-        .auth-left .brand {
-            display: flex; align-items: center; gap: 12px;
-            margin-bottom: 24px;
-        }
-        .auth-left .brand-icon { background: rgba(255,255,255,.2); }
+
         .auth-left h1 { font-size: 32px; font-weight: 700; margin-bottom: 12px; }
         .auth-left p { font-size: 16px; opacity: .85; max-width: 320px; text-align: center; }
+
         .auth-right {
             width: 420px;
             display: flex;
@@ -47,134 +47,177 @@
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             border-top: 4px solid #6366f1;
-            height: 100vh; /* match left panel height */
+            height: 100vh;
         }
+
         .brand {
-            display: flex; align-items: center; gap: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             margin-bottom: 24px;
             justify-content: center;
         }
+
         .brand-icon {
-            width: 32px; height: 32px;
+            width: 32px;
+            height: 32px;
             background: #6366f1;
             border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 18px;
             color: white;
         }
-        .brand-name { font-size: 20px; font-weight: 700; color: #334155; }
-        .auth-form h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: #1e293b; }
-        .auth-form .subtitle { font-size: 14px; color: #64748b; margin-bottom: 24px; }
-        .form-label { font-size: 13px; font-weight: 600; color: #1e293b; }
-        .form-control {
-            border-radius: 8px;
-            border-color: #cbd5e1;
-            font-size: 14px;
-            padding: 10px 14px;
+
+        .brand-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #334155;
         }
-        .form-control:focus {
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99,102,241,.15);
-        }
-        .btn-primary {
-            background: #6366f1; border-color: #6366f1;
-            border-radius: 8px; font-size: 14px; font-weight: 600;
-            padding: 11px; width: 100%; margin-top: 8px;
-        }
-        .btn-primary:hover { background: #4f46e5; border-color: #4f46e5; }
-        .divider { text-align: center; color: #94a3b8; font-size: 13px; margin: 20px 0; }
-        .link { color: #6366f1; text-decoration: none; font-weight: 500; }
-        .link:hover { color: #4f46e5; }
-        @media (max-width: 768px) {
-            .auth-left { display: none; }
-            .auth-right { width: 100%; padding: 30px 12px; }
-        }
-        /* form styles */
+
         .auth-form { width: 100%; max-width: 360px; }
-        .auth-form h2 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
-        .auth-form .subtitle { font-size: 14px; color: #64748b; margin-bottom: 32px; }
-        .form-label { font-size: 13px; font-weight: 600; color: #1e293b; }
+
+        .auth-form h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #1e293b;
+        }
+
+        .auth-form .subtitle {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 32px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
         .form-control {
             border-radius: 8px;
             border-color: #e2e8f0;
             font-size: 14px;
             padding: 10px 14px;
         }
+
         .form-control:focus {
             border-color: #6366f1;
             box-shadow: 0 0 0 3px rgba(99,102,241,.15);
         }
+
         .btn-primary {
-            background: #6366f1; border-color: #6366f1;
-            border-radius: 8px; font-size: 14px; font-weight: 600;
-            padding: 11px; width: 100%; margin-top: 8px;
+            background: #6366f1;
+            border-color: #6366f1;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 11px;
+            width: 100%;
+            margin-top: 8px;
         }
-        .btn-primary:hover { background: #4f46e5; border-color: #4f46e5; }
-        .divider { text-align: center; color: #94a3b8; font-size: 13px; margin: 20px 0; }
-        .link { color: #6366f1; text-decoration: none; font-weight: 500; }
+
+        .btn-primary:hover {
+            background: #4f46e5;
+            border-color: #4f46e5;
+        }
+
+        .divider {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .link {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
         .link:hover { color: #4f46e5; }
+
         @media (max-width: 768px) {
             .auth-left { display: none; }
             .auth-right { width: 100%; padding: 30px 12px; }
         }
     </style>
 </head>
+
 <body>
+
 <div class="auth-left">
-    <div class="brand">
-        <div class="brand-icon"><i class="bi bi-people-fill"></i></div>
-        <span class="brand-name">TeamHub collaboration</span>
-    </div>
     <h1>Welcome back</h1>
-    <p>Your team collaboration platform </p>
+    <p>Your team collaboration platform</p>
 </div>
 
 <div class="auth-right">
     <div class="auth-form">
+
         <div class="brand">
             <div class="brand-icon"><i class="bi bi-people-fill"></i></div>
             <span class="brand-name">TeamHub</span>
         </div>
-        <h2>Sign in</h2>
-        <p class="subtitle">Please sign n</p>
 
+        <h2>Sign in</h2>
+        <p class="subtitle">Please sign in</p>
+
+        <!-- ✅ Messages Block FIXED -->
         {% if messages %}
-       
- {% for message iase sign in<    <p class="subtitle">Please sign in</p>iv class="alert alert-danger mb-3" style="border-radius:8px;font-size:13px;border:none;background:#fef2f2;color:#991b1b;">
-                {{ message }}
-            </div>
+            {% for message in messages %}
+                <div class="alert alert-danger mb-3"
+                     style="border-radius:8px;font-size:13px;border:none;background:#fef2f2;color:#991b1b;">
+                    {{ message }}
+                </div>
             {% endfor %}
         {% endif %}
 
         <form method="post" novalidate>
             {% csrf_token %}
+
             <div class="mb-3">
                 <label class="form-label">Username</label>
-                <input type="text" name="username" class="form-control" placeholder="Your username" autofocus
-                       value="{{ form.username.value|default:'' }}">
+                <input type="text" name="username" class="form-control"
+                       placeholder="Your username"
+                       value="{{ form.username.value|default:'' }}" autofocus>
+
                 {% if form.username.errors %}
-                <div style="color:#ef4444;font-size:12px;margin-top:4px;">{{ form.username.errors.0 }}</div>
+                    <div style="color:#ef4444;font-size:12px;margin-top:4px;">
+                        {{ form.username.errors.0 }}
+                    </div>
                 {% endif %}
             </div>
+
             <div class="mb-3">
                 <label class="form-label">Password</label>
                 <input type="password" name="password" class="form-control" placeholder="Your password">
+
                 {% if form.password.errors %}
-                <div style="color:#ef4444;font-size:12px;margin-top:4px;">{{ form.password.errors.0 }}</div>
+                    <div style="color:#ef4444;font-size:12px;margin-top:4px;">
+                        {{ form.password.errors.0 }}
+                    </div>
                 {% endif %}
             </div>
+
             <button type="submit" class="btn btn-primary">
                 <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
             </button>
         </form>
 
         <div class="divider">— or —</div>
+
         <p style="text-align:center;font-size:14px;color:#64748b;">
-            Don't have an account? <a href="{% url 'register' %}" class="link">Create one</a>
+            Don't have an account?
+            <a href="{% url 'register' %}" class="link">Create one</a>
         </p>
+
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
